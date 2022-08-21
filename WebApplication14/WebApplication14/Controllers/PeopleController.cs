@@ -44,9 +44,9 @@ namespace WebApplication14.Controllers
 
         public PeopleController()
         {
-            people.Add(new Person { FirstName = "vardas1", LastName = "pavarde", Id = 1 });
-            people.Add(new Person { FirstName = "vardas2", LastName = "pavarde", Id = 2 });
-            people.Add(new Person { FirstName = "vardas3", LastName = "pavarde", Id = 3 });
+            people.Add(new Person { FirstName = "vardas1", Comment = "pavarde", Id = 1 });
+            people.Add(new Person { FirstName = "vardas2", Comment = "pavarde", Id = 2 });
+            people.Add(new Person { FirstName = "vardas3", Comment = "pavarde", Id = 3 });
 
 
 
@@ -147,9 +147,9 @@ namespace WebApplication14.Controllers
         //public string Put(int id, [FromBody]string Firstname)
         public string Put(Person putt)
         {
-            UpdateDbRecord(putt.Id, putt.FirstName, putt.LastName);
+            UpdateDbRecord(putt.Id, putt.FirstName, putt.Comment);
 
-            return putt.Id +  "  " + putt.FirstName + "   " + putt.LastName;
+            return putt.Id +  "  " + putt.FirstName + "   " + putt.Comment;
         }
 
         // DELETE: api/People/5
@@ -169,7 +169,7 @@ namespace WebApplication14.Controllers
             //people.Add(val);
             //WriteToDb(5, "eilute1", "eilute2");
 
-            WriteToDb(val.Id, val.FirstName, val.LastName);
+            WriteToDb(val.Id, val.FirstName, val.Comment);
 
             //irasymasDB(val.Id, val.FirstName, val.LastName);
 
@@ -229,7 +229,7 @@ namespace WebApplication14.Controllers
             {
 
                 count0++;
-                listPerson.Add(new Person { FirstName = reader.GetString(1), LastName = reader.GetString(2), Id = reader.GetInt16(0) });
+                listPerson.Add(new Person { FirstName = reader.GetString(1), Comment = reader.GetString(2), Id = reader.GetInt16(0) });
 
             }
 
