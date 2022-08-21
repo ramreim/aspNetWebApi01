@@ -27,13 +27,13 @@ namespace WebApplication14.Controllers
         List<string> sarasas = new List<string>();
 
 
-        List<Person> listPerson = new List<Person>();
+        List<Person> listCustomer = new List<Person>();
 
 
 
         string path = "data_table.db";
         //string cs = @"Data Source=C:\Users\ramunasr\Documents\visual studio 2015\Projects\WindowsFormsApplicationSQLite001\WindowsFormsApplicationSQLite001\bin\Debug\data_table.db";
-        string cs = @"Data Source=C:\VisualStudioProjects\WindowsFormsApplicationSQLite001\WindowsFormsApplicationSQLite001\bin\Debug\data_table.db"; //data_table.db
+        string cs = @"Data Source=C:\VisualStudioProjects\WindowsFormsApplicationSQLite001\WindowsFormsApplicationSQLite001\bin\Debug\data_table.db;foreign keys=true;"; //data_table.db
 
         //string cs = "Data Source=:memory:Version=3;New=True";
 
@@ -114,7 +114,7 @@ namespace WebApplication14.Controllers
      
 
 
-            return listPerson;
+            return listCustomer;
             
 
 
@@ -147,7 +147,7 @@ namespace WebApplication14.Controllers
         //public string Put(int id, [FromBody]string Firstname)
         public string Put(Person putt)
         {
-            UpdateDbRecord(putt.Id, putt.FirstName, putt.Comment);
+            UpdateDbRecord(putt.Id, putt.FirstName, putt.Age, putt.Comment);
 
             return putt.Id +  "  " + putt.FirstName + "   " + putt.Comment;
         }
@@ -169,7 +169,7 @@ namespace WebApplication14.Controllers
             //people.Add(val);
             //WriteToDb(5, "eilute1", "eilute2");
 
-            WriteToDb(val.Id, val.FirstName, val.Comment);
+            WriteToDb(val.Id, val.FirstName, val.Age, val.Comment);
 
             //irasymasDB(val.Id, val.FirstName, val.LastName);
 
@@ -179,7 +179,7 @@ namespace WebApplication14.Controllers
         //CreateDb
         //void WriteToDb(int gautasid, string gautas_laikas, string gauta_eilute)
 
-        void WriteToDb(int gautasid, string gautas_laikas, string gauta_eilute)
+        void WriteToDb(int gautasid, string Namee, int Age, string Commentt)
         {
 
 
@@ -192,7 +192,9 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "INSERT INTO test(name,id) VALUES('vardas','id_numeris')";
                 //cmd.CommandText = "INSERT INTO test(name,id) VALUES(" + gautas_laikas + ", '" + gauta_eilute + "', '" + gauta_eilute + "')";
                 //cmd.CommandText = "INSERT INTO test(name,id) VALUES('" + gautas_laikas + "', '" + gauta_eilute + "')";
-                cmd.CommandText = "INSERT INTO test(name,surname) VALUES('" + gautas_laikas + "', '" + gauta_eilute + "')";
+                //cmd.CommandText = "INSERT INTO test(name,surname) VALUES('" + Namee + "', '" + Commentt + "')";
+                //cmd.CommandText = "INSERT INTO CustomerTable(Name, Age, Comment) VALUES('vardas01', 18, 'komentaras 001')";
+                cmd.CommandText = "INSERT INTO CustomerTable(Name, Age, Comment) VALUES('" + Namee + "', "+ Age +", '" + Commentt + "')";
                 cmd.ExecuteNonQuery();
                 //
 
@@ -219,7 +221,7 @@ namespace WebApplication14.Controllers
             //string stm = "SELECT * FROM test";
             //var cmd = new SQLiteCommand(stm, con);
             var cmd = new SQLiteCommand(con);
-            cmd.CommandText = "SELECT * FROM test";
+            cmd.CommandText = "SELECT * FROM CustomerTable";
 
             SQLiteDataReader reader = cmd.ExecuteReader();
 
@@ -229,7 +231,7 @@ namespace WebApplication14.Controllers
             {
 
                 count0++;
-                listPerson.Add(new Person { FirstName = reader.GetString(1), Comment = reader.GetString(2), Id = reader.GetInt16(0) });
+                listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
 
             }
 
@@ -238,7 +240,7 @@ namespace WebApplication14.Controllers
 
         }
 
-        void UpdateDbRecord(int gautasid, string gautas_laikas, string gauta_eilute)
+        void UpdateDbRecord(int gautasid, string getName, int getAge, string getComment)
         {
 
             var con = new SQLiteConnection(cs);
@@ -250,7 +252,9 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "INSERT INTO test(name,surname) VALUES('" + gautas_laikas + "', '" +  + "')";
                 //cmd.CommandText = "UPDATE test SET name = " + gautas_laikas + "', '" + gauta_eilute + " WHERE id = " + gautasid.ToString();
                 //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"' WHERE id = " + gautasid.ToString();
-                cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"', surname = '"+ gauta_eilute + "'" + " WHERE id = " + gautasid.ToString();
+                //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"', surname = '"+ gauta_eilute + "'" + " WHERE id = " + gautasid.ToString();
+                //cmd.CommandText = "UPDATE CustomerTable SET Name = 'pakeistas3', Age = 99, Comment = 'komennn' WHERE CustomerId = " + 7;
+                cmd.CommandText = "UPDATE CustomerTable SET Name = '" + getName + "', Age = " + getAge + ", Comment = '" + getComment + "' WHERE CustomerId = " + gautasid.ToString();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("\n\nupdate vyksta\n\n");
 
