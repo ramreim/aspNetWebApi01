@@ -23,7 +23,7 @@ namespace WebApplication14.Models
         /// <summary>
         /// The user's age.
         /// </summary>
-        public int Age { get; set; } = 1;
+        public int Age { get; set; } = 0;
 
         /// <summary>
         /// The user's comment.
