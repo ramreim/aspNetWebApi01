@@ -29,6 +29,9 @@ namespace WebApplication14.Controllers
 
         List<Person> listCustomer = new List<Person>();
 
+        List<History> historyList = new List<History>();
+
+
 
 
         string path = "data_table.db";
@@ -72,15 +75,18 @@ namespace WebApplication14.Controllers
 
         //[Route("api/Peeps/GetFirstNames")]
         //[Route("api/People/GetFirstNames")]
-        [Route("api/People/GetHistory/{userid:int}/{laikas:int}/{duomenys}")]
+        //[Route("api/People/GetHistory/{userid:int}/{laikas:int}/{duomenys}")]
         //[Route("api/People/GetFirstNames/{userid:int}/{laikas:int}/{duomenys:int}")]
         //[Route("api/People/GetFirstNames/{userid:int}/{laikas:int}/{duomenys:int}")]
+
+        [Route("api/People/GetHistory/{userid:int}")]
         [HttpGet]
        // public string GetFirstNames(int erid, string age, string gautaa_eilutee)
-         public string GetHistory(int userid, int laikas, string duomenys)
+        public List<History>GetHistory(int userid)
+        //public string GetHistory(int userid, int laikas, string duomenys)
         //public List<string> GetFirstNames(int userid, int age)
         {
-
+            SelectHistoryFromDb(userid);
 
 
 
@@ -99,7 +105,7 @@ namespace WebApplication14.Controllers
             }
             return output;
             */
-            return userid.ToString() + "    " + laikas.ToString() + "    " + duomenys.ToString();
+            return historyList;
         }
 
         // GET: api/People
@@ -240,7 +246,39 @@ namespace WebApplication14.Controllers
 
         }
 
-        void UpdateDbRecord(int gautasid, string getName, int getAge, string getComment)
+
+        int SelectHistoryFromDb(int getUserId)
+        {
+            
+
+            var con = new SQLiteConnection(cs);
+            con.Open();
+
+            //string stm = "SELECT * FROM test";
+            //var cmd = new SQLiteCommand(stm, con);
+            var cmd = new SQLiteCommand(con);
+            cmd.CommandText = "SELECT * FROM HistoryTable WHERE CustomerHistoryId =" + getUserId;
+
+            SQLiteDataReader reader = cmd.ExecuteReader();
+
+
+
+            while (reader.Read())
+            {
+                historyList.Add(new History { EventId = reader.GetInt16(0), Status = reader.GetString(1), DataLaikas = reader.GetString(2), CustomerId = reader.GetInt16(3)});
+            
+            }
+            //                listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
+
+            //e(State, DateTime, CustomerHistoryId) 
+
+            return 0;
+
+
+        }
+
+
+        void UpdateDbRecord(int getId, string getName, int getAge, string getComment)
         {
 
             var con = new SQLiteConnection(cs);
@@ -254,7 +292,7 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"' WHERE id = " + gautasid.ToString();
                 //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"', surname = '"+ gauta_eilute + "'" + " WHERE id = " + gautasid.ToString();
                 //cmd.CommandText = "UPDATE CustomerTable SET Name = 'pakeistas3', Age = 99, Comment = 'komennn' WHERE CustomerId = " + 7;
-                cmd.CommandText = "UPDATE CustomerTable SET Name = '" + getName + "', Age = " + getAge + ", Comment = '" + getComment + "' WHERE CustomerId = " + gautasid.ToString();
+                cmd.CommandText = "UPDATE CustomerTable SET Name = '" + getName + "', Age = " + getAge + ", Comment = '" + getComment + "' WHERE CustomerId = " + getId.ToString();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("\n\nupdate vyksta\n\n");
 
@@ -285,7 +323,10 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "INSERT INTO test(name,surname) VALUES('" + gautas_laikas + "', '" +  + "')";
                 //cmd.CommandText = "UPDATE test SET name = " + gautas_laikas + "', '" + gauta_eilute + " WHERE id = " + gautasid.ToString();
                 //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"' WHERE id = " + gautasid.ToString();
-                cmd.CommandText = "DELETE FROM test WHERE id = " + gautasid.ToString();
+                //cmd.CommandText = "DELETE FROM test WHERE id = " + gautasid.ToString();
+
+                cmd.CommandText = "DELETE FROM CustomerTable WHERE CustomerId = " + gautasid.ToString();
+
                 //cmd.CommandText = "DELETE FROM test WHERE id = 4";
 
                 cmd.ExecuteNonQuery();
