@@ -72,10 +72,12 @@ namespace WebApplication14.Controllers
 
         //[Route("api/Peeps/GetFirstNames")]
         //[Route("api/People/GetFirstNames")]
-        [Route("api/People/GetFirstNames/{userid:int}/{age}/{gautaa_eilutee}")]
+        [Route("api/People/GetHistory/{userid:int}/{laikas:int}/{duomenys}")]
+        //[Route("api/People/GetFirstNames/{userid:int}/{laikas:int}/{duomenys:int}")]
         //[Route("api/People/GetFirstNames/{userid:int}/{laikas:int}/{duomenys:int}")]
         [HttpGet]
-        public string GetFirstNames(int erid, string age, string gautaa_eilutee)
+       // public string GetFirstNames(int erid, string age, string gautaa_eilutee)
+         public string GetHistory(int userid, int laikas, string duomenys)
         //public List<string> GetFirstNames(int userid, int age)
         {
 
@@ -97,7 +99,7 @@ namespace WebApplication14.Controllers
             }
             return output;
             */
-            return "aaadd";
+            return userid.ToString() + "    " + laikas.ToString() + "    " + duomenys.ToString();
         }
 
         // GET: api/People
