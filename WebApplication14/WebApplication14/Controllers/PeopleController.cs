@@ -410,7 +410,13 @@ namespace WebApplication14.Controllers
             //string stm = "SELECT * FROM test";
             //var cmd = new SQLiteCommand(stm, con);
             var cmd = new SQLiteCommand(con);
-            cmd.CommandText = "SELECT * FROM HistoryTable";
+            //cmd.CommandText = "SELECT * FROM HistoryTable WHERE CustomerHistoryId =" + getUserId;
+
+            //cmd.CommandText = "SELECT * FROM HistoryTable INNER JOIN CustomerTable ON CustomerTable.CustomerId = HistoryTable.CustomerHistoryId";
+
+
+            cmd.CommandText = "SELECT * FROM HistoryTable INNER JOIN CustomerTable ON CustomerTable.CustomerId = HistoryTable.CustomerHistoryId WHERE CustomerHistoryId =" + getUserId;
+
 
 
             //cmd.CommandText = "SELECT MAX(CustomerID) FROM CustomerTable";
@@ -423,9 +429,12 @@ namespace WebApplication14.Controllers
 
             while (reader.Read())
             {
-                historyList.Add(new History { EventId = reader.GetInt16(0), Status = reader.GetString(1), DateTimee = reader.GetString(2), CustomerId = reader.GetInt16(3)});
+                historyList.Add(new History { EventId = reader.GetInt16(0), Status = reader.GetString(1), DateTimee = reader.GetString(2), CustomerId = reader.GetInt16(3), FirstName = reader.GetString(5)});
+
+                //var kazkas = reader.GetString(5);
+                //var kazkas2 = kazkas;
                 //maksimalus = reader.GetInt16(0);
-            
+
             }
             //                listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
 
