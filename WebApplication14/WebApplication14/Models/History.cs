@@ -14,6 +14,6 @@ namespace WebApplication14.Models
 
         public string Status { get; set; } = "";
 
-        public string DataLaikas { get; set; } = "";
+        public string DateTimee { get; set; } = "";
     }
 }

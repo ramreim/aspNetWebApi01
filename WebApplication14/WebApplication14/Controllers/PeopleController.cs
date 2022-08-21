@@ -265,7 +265,7 @@ namespace WebApplication14.Controllers
 
             while (reader.Read())
             {
-                historyList.Add(new History { EventId = reader.GetInt16(0), Status = reader.GetString(1), DataLaikas = reader.GetString(2), CustomerId = reader.GetInt16(3)});
+                historyList.Add(new History { EventId = reader.GetInt16(0), Status = reader.GetString(1), DateTimee = reader.GetString(2), CustomerId = reader.GetInt16(3)});
             
             }
             //                listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
