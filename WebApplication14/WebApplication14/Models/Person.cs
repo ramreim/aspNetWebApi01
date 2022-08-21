@@ -21,9 +21,15 @@ namespace WebApplication14.Models
         /// </summary>
         public string FirstName { get; set; } = "";
         /// <summary>
-        /// The user's last name.
+        /// The user's age.
         /// </summary>
-        public string LastName { get; set; } = "";
+        public int Age { get; set; } = 0;
+
+        /// <summary>
+        /// The user's comment.
+        /// </summary>
+
+        public string Comment { get; set; } = "";
 
     }
 }
