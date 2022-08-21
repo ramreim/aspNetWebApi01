@@ -86,9 +86,9 @@ namespace WebApplication14.Controllers
         //public string GetHistory(int userid, int laikas, string duomenys)
         //public List<string> GetFirstNames(int userid, int age)
         {
-            SelectHistoryFromDb(userid);
+           int gautass =  SelectHistoryFromDb(userid);
 
-
+            int gautas2 = gautass;
 
             // irasymasDB(erid, age, gautaa_eilutee);
             //irasymasDB(10, "laikass", "gautaa_eilutee");
@@ -176,6 +176,9 @@ namespace WebApplication14.Controllers
             //WriteToDb(5, "eilute1", "eilute2");
 
             WriteToDb(val.Id, val.FirstName, val.Age, val.Comment);
+            //int aaa = selectLastCustomerId();
+            int aaa = 666;
+            int bbb = aaa;
 
             //irasymasDB(val.Id, val.FirstName, val.LastName);
 
@@ -185,13 +188,18 @@ namespace WebApplication14.Controllers
         //CreateDb
         //void WriteToDb(int gautasid, string gautas_laikas, string gauta_eilute)
 
-        void WriteToDb(int gautasid, string Namee, int Age, string Commentt)
+        int WriteToDb(int gautasid, string Namee, int Age, string Commentt)
         {
+            int lastId = 1;
 
+            int lastId22 = 1;
+            int lastid23 = 0;
 
             var con = new SQLiteConnection(cs);
             con.Open();
-            var cmd = new SQLiteCommand(con);
+            var cmd0 = new SQLiteCommand(con);
+            var cmd1 = new SQLiteCommand(con);
+            var cmd2 = new SQLiteCommand(con);
 
             try
             {
@@ -200,22 +208,160 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "INSERT INTO test(name,id) VALUES('" + gautas_laikas + "', '" + gauta_eilute + "')";
                 //cmd.CommandText = "INSERT INTO test(name,surname) VALUES('" + Namee + "', '" + Commentt + "')";
                 //cmd.CommandText = "INSERT INTO CustomerTable(Name, Age, Comment) VALUES('vardas01', 18, 'komentaras 001')";
-                cmd.CommandText = "INSERT INTO CustomerTable(Name, Age, Comment) VALUES('" + Namee + "', "+ Age +", '" + Commentt + "')";
+                cmd0.CommandText = "INSERT INTO CustomerTable(Name, Age, Comment) VALUES('" + Namee + "', "+ Age +", '" + Commentt + "')";
+
+                //cmd1.CommandText = "SELECT * FROM CustomerTable ORDER BY CustomerId DESC LIMIT 1";
+                cmd1.CommandText = "SELECT * FROM CustomerTable";
+
+                
+
+
+                cmd0.ExecuteNonQuery();
+
+
+                SQLiteDataReader reader002 = cmd1.ExecuteReader();
+
+                while (reader002.Read())
+                {
+
+                    //count0++;
+                    //listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
+                    //paskutinis3 = reader.GetInt16(0);
+                    //tarpinis = paskutinis3;
+
+                    lastId22 = reader002.GetInt16(0);
+                    
+
+                }
+                lastid23 = lastId22;
+                lastid23 = 0;
+                cmd2.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Priregistruotas', '2022-12-22 19:27:55.765',  " + lastId22 + ")";
+
+                cmd2.ExecuteNonQuery();
+
+                cmd0.Dispose();
+                cmd1.Dispose();
+                cmd2.Dispose();
+              
+                
+
+
+
+
+
+                con.Close();
+
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+
+               
+
+
+                
+
+
+ 
+                /*
+
+
+
+                cmd.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Priregistruotas', '2022-12-22 19:27:55.765',  " + lastId + ")";
+
+                Console.WriteLine(cmd.CommandText);
+
                 cmd.ExecuteNonQuery();
+                */
+
+
                 //
+                return 26;
 
             }
             catch (Exception)
             {
                 Console.WriteLine("cannot insert data");
-                return;
+                return 55;
             }
            
-            cmd.Dispose();
-            con.Close();
+   
             //INSERT PABAIGA
 
         }
+
+
+        int selectLastCustomerId()
+        {
+
+            int paskutinis3 = 0;
+            int tarpinis = 0;
+
+
+            /*
+
+
+            cmd.CommandText = "SELECT * FROM CustomerTable ORDER BY CustomerId DESC LIMIT 1";
+
+            SQLiteDataReader reader = cmd.ExecuteReader();
+
+            lastId = reader.GetInt16(0);
+            Console.WriteLine(cmd.CommandText);
+
+            while (reader.Read())
+            {
+
+                lastId = reader.GetInt16(0);
+            }
+            */
+            //int count0 = 0;
+
+            var con = new SQLiteConnection(cs);
+            con.Open();
+            var cmd = new SQLiteCommand(con);
+
+            con.Open();
+
+            //string stm = "SELECT * FROM test";
+            //var cmd = new SQLiteCommand(stm, con);
+
+            //cmd.CommandText = "SELECT * FROM CustomerTable";
+
+            cmd.CommandText = "SELECT * FROM CustomerTable ORDER BY CustomerId DESC LIMIT 1";
+            
+
+
+
+            SQLiteDataReader reader = cmd.ExecuteReader();
+
+
+
+            while (reader.Read())
+            {
+
+                //count0++;
+                //listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
+                paskutinis3 = reader.GetInt16(0);
+                tarpinis = paskutinis3;
+
+            }
+
+            return paskutinis3;
+
+
+
+
+
+
+
+
+
+
+
+
+            return 0;
+
+        }
+
 
         int SelectFromDb()
         {
@@ -241,6 +387,9 @@ namespace WebApplication14.Controllers
 
             }
 
+            cmd.Dispose();
+            con.Close();
+
             return count0;
         
 
@@ -249,7 +398,7 @@ namespace WebApplication14.Controllers
 
         int SelectHistoryFromDb(int getUserId)
         {
-            
+            int maksimalus = 0;
 
             var con = new SQLiteConnection(cs);
             con.Open();
@@ -257,22 +406,28 @@ namespace WebApplication14.Controllers
             //string stm = "SELECT * FROM test";
             //var cmd = new SQLiteCommand(stm, con);
             var cmd = new SQLiteCommand(con);
-            cmd.CommandText = "SELECT * FROM HistoryTable WHERE CustomerHistoryId =" + getUserId;
+            cmd.CommandText = "SELECT * FROM HistoryTable";
+
+
+            //cmd.CommandText = "SELECT MAX(CustomerID) FROM CustomerTable";
+
+            //cmd.CommandText = "SELECT * FROM HistoryTable WHERE CustomerHistoryId =" + getUserId;
 
             SQLiteDataReader reader = cmd.ExecuteReader();
 
-
+            
 
             while (reader.Read())
             {
                 historyList.Add(new History { EventId = reader.GetInt16(0), Status = reader.GetString(1), DateTimee = reader.GetString(2), CustomerId = reader.GetInt16(3)});
+                //maksimalus = reader.GetInt16(0);
             
             }
             //                listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
 
             //e(State, DateTime, CustomerHistoryId) 
 
-            return 0;
+            return maksimalus;
 
 
         }
