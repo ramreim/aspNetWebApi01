@@ -29,6 +29,8 @@ namespace WebApplication14.Controllers
 
         List<Person> listCustomer = new List<Person>();
 
+        List<Person> listCustomerById = new List<Person>();
+
         List<History> historyList = new List<History>();
 
 
@@ -129,10 +131,14 @@ namespace WebApplication14.Controllers
         }
 
         // GET: api/People/5
-        public Person Get(int id)
-        {
-            return people.Where(x => x.Id == id).FirstOrDefault();
-        }
+        //public Person Get(int id)
+          public List<Person> Get(int id)
+         {
+
+            SelectFromDbById(id);
+
+            return listCustomerById;
+         }
 
         // POST: api/People
         /*public void Post(Person val)
@@ -176,9 +182,7 @@ namespace WebApplication14.Controllers
             //WriteToDb(5, "eilute1", "eilute2");
 
             WriteToDb(val.Id, val.FirstName, val.Age, val.Comment);
-            //int aaa = selectLastCustomerId();
-            int aaa = 666;
-            int bbb = aaa;
+
 
             //irasymasDB(val.Id, val.FirstName, val.LastName);
 
@@ -190,10 +194,8 @@ namespace WebApplication14.Controllers
 
         int WriteToDb(int gautasid, string Namee, int Age, string Commentt)
         {
-            int lastId = 1;
+            int lastCustomerId = 1;
 
-            int lastId22 = 1;
-            int lastid23 = 0;
 
             var con = new SQLiteConnection(cs);
             con.Open();
@@ -210,44 +212,32 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "INSERT INTO CustomerTable(Name, Age, Comment) VALUES('vardas01', 18, 'komentaras 001')";
                 cmd0.CommandText = "INSERT INTO CustomerTable(Name, Age, Comment) VALUES('" + Namee + "', "+ Age +", '" + Commentt + "')";
 
-                //cmd1.CommandText = "SELECT * FROM CustomerTable ORDER BY CustomerId DESC LIMIT 1";
-                cmd1.CommandText = "SELECT * FROM CustomerTable";
+                cmd1.CommandText = "SELECT * FROM CustomerTable ORDER BY CustomerId DESC LIMIT 1";
+                //cmd1.CommandText = "SELECT * FROM CustomerTable";
 
                 
 
 
                 cmd0.ExecuteNonQuery();
-
-
+                                
                 SQLiteDataReader reader002 = cmd1.ExecuteReader();
-
+                                
                 while (reader002.Read())
                 {
-
-                    //count0++;
-                    //listCustomer.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
-                    //paskutinis3 = reader.GetInt16(0);
-                    //tarpinis = paskutinis3;
-
-                    lastId22 = reader002.GetInt16(0);
-                    
-
+                    lastCustomerId = reader002.GetInt16(0);
                 }
-                lastid23 = lastId22;
-                lastid23 = 0;
-                cmd2.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Priregistruotas', '2022-12-22 19:27:55.765',  " + lastId22 + ")";
+
+                string DateTimee = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+
+                //cmd2.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Priregistruotas', '2022-12-22 19:27:55.765',  " + lastId22 + ")";
+                cmd2.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Priregistruotas', '" + DateTimee + "',  " + lastCustomerId + ")";
 
                 cmd2.ExecuteNonQuery();
 
                 cmd0.Dispose();
                 cmd1.Dispose();
                 cmd2.Dispose();
-              
-                
-
-
-
-
 
                 con.Close();
 
@@ -255,26 +245,7 @@ namespace WebApplication14.Controllers
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
 
-               
-
-
                 
-
-
- 
-                /*
-
-
-
-                cmd.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Priregistruotas', '2022-12-22 19:27:55.765',  " + lastId + ")";
-
-                Console.WriteLine(cmd.CommandText);
-
-                cmd.ExecuteNonQuery();
-                */
-
-
-                //
                 return 26;
 
             }
@@ -390,10 +361,43 @@ namespace WebApplication14.Controllers
             cmd.Dispose();
             con.Close();
 
-            return count0;
-        
+            return count0;       
 
         }
+
+
+
+
+        int SelectFromDbById(int getId)
+        {
+            int count0 = 0;
+
+            var con = new SQLiteConnection(cs);
+            con.Open();
+
+            var cmd = new SQLiteCommand(con);
+            cmd.CommandText = "SELECT * FROM CustomerTable WHERE CustomerId = " + getId;
+
+            SQLiteDataReader reader = cmd.ExecuteReader();
+
+
+
+            while (reader.Read())
+            {
+
+                count0++;
+                listCustomerById.Add(new Person { Id = reader.GetInt16(0), FirstName = reader.GetString(1), Age = reader.GetInt16(2), Comment = reader.GetString(3) });
+
+            }
+
+            cmd.Dispose();
+            con.Close();
+
+            return count0;
+
+        }
+
+
 
 
         int SelectHistoryFromDb(int getUserId)
@@ -439,6 +443,10 @@ namespace WebApplication14.Controllers
             var con = new SQLiteConnection(cs);
             con.Open();
             var cmd = new SQLiteCommand(con);
+            var cmdChangeStatus = new SQLiteCommand(con);
+
+            string DateTimee = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
 
             try
             {
@@ -448,7 +456,13 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"', surname = '"+ gauta_eilute + "'" + " WHERE id = " + gautasid.ToString();
                 //cmd.CommandText = "UPDATE CustomerTable SET Name = 'pakeistas3', Age = 99, Comment = 'komennn' WHERE CustomerId = " + 7;
                 cmd.CommandText = "UPDATE CustomerTable SET Name = '" + getName + "', Age = " + getAge + ", Comment = '" + getComment + "' WHERE CustomerId = " + getId.ToString();
+                cmdChangeStatus.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Redaguotas', '" + DateTimee + "',  " + getId + ")";
+
+
+
                 cmd.ExecuteNonQuery();
+                cmdChangeStatus.ExecuteNonQuery();
+
                 Console.WriteLine("\n\nupdate vyksta\n\n");
 
 
@@ -460,18 +474,24 @@ namespace WebApplication14.Controllers
             }
 
             cmd.Dispose();
+            cmdChangeStatus.Dispose();
             con.Close();
 
 
         }
 
 
-        void DeleteFromTable(int gautasid)
+        void DeleteFromTable(int getCustomerId)
         {
 
             var con = new SQLiteConnection(cs);
             con.Open();
             var cmd = new SQLiteCommand(con);
+            var cmdChangeStatus = new SQLiteCommand(con);
+
+
+            string DateTimee = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
 
             try
             {
@@ -480,12 +500,15 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"' WHERE id = " + gautasid.ToString();
                 //cmd.CommandText = "DELETE FROM test WHERE id = " + gautasid.ToString();
 
-                cmd.CommandText = "DELETE FROM CustomerTable WHERE CustomerId = " + gautasid.ToString();
+                cmd.CommandText = "DELETE FROM CustomerTable WHERE CustomerId = " + getCustomerId.ToString();
+                cmdChangeStatus.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Istrintas', '" + DateTimee + "',  " + getCustomerId + ")";
 
-                //cmd.CommandText = "DELETE FROM test WHERE id = 4";
+
+
 
                 cmd.ExecuteNonQuery();
-                Console.WriteLine("\n\n  delete vyksta \n\n");
+                cmdChangeStatus.ExecuteNonQuery();
+                Console.WriteLine("\n\n  deleting \n\n");
 
 
             }
@@ -496,6 +519,7 @@ namespace WebApplication14.Controllers
             }
 
             cmd.Dispose();
+            cmdChangeStatus.Dispose();
             con.Close();
 
 
