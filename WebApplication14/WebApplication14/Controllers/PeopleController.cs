@@ -333,7 +333,7 @@ namespace WebApplication14.Controllers
 
         }
 
-
+        //SQLite
         int SelectFromDb()
         {
             int count0 = 0;
