@@ -38,7 +38,8 @@ namespace WebApplication14.Controllers
 
         string path = "data_table.db";
         //string cs = @"Data Source=C:\Users\ramunasr\Documents\visual studio 2015\Projects\WindowsFormsApplicationSQLite001\WindowsFormsApplicationSQLite001\bin\Debug\data_table.db";
-        string cs = @"Data Source=C:\VisualStudioProjects\WindowsFormsApplicationSQLite001\WindowsFormsApplicationSQLite001\bin\Debug\data_table.db;foreign keys=true;"; //data_table.db
+        //string cs = @"Data Source=C:\VisualStudioProjects\WindowsFormsApplicationSQLite001\WindowsFormsApplicationSQLite001\bin\Debug\data_table.db;foreign keys=true;"; //data_table.db
+        string cs = @"Data Source=C:\VisualStudioProjects\WindowsFormsApplicationSQLite001\WindowsFormsApplicationSQLite001\bin\Debug\data_table.db;"; //data_table.db
 
         //string cs = "Data Source=:memory:Version=3;New=True";
 
@@ -495,7 +496,7 @@ namespace WebApplication14.Controllers
 
             var con = new SQLiteConnection(cs);
             con.Open();
-            var cmd = new SQLiteCommand(con);
+            //var cmd = new SQLiteCommand(con);
             var cmdChangeStatus = new SQLiteCommand(con);
 
 
@@ -509,13 +510,13 @@ namespace WebApplication14.Controllers
                 //cmd.CommandText = "UPDATE test SET name = " + "'" + gautas_laikas +"' WHERE id = " + gautasid.ToString();
                 //cmd.CommandText = "DELETE FROM test WHERE id = " + gautasid.ToString();
 
-                cmd.CommandText = "DELETE FROM CustomerTable WHERE CustomerId = " + getCustomerId.ToString();
+               // cmd.CommandText = "DELETE FROM CustomerTable WHERE CustomerId = " + getCustomerId.ToString();
                 cmdChangeStatus.CommandText = "INSERT INTO HistoryTable(State, DateTime, CustomerHistoryId) VALUES('Istrintas', '" + DateTimee + "',  " + getCustomerId + ")";
 
 
 
 
-                cmd.ExecuteNonQuery();
+                //cmd.ExecuteNonQuery();
                 cmdChangeStatus.ExecuteNonQuery();
                 Console.WriteLine("\n\n  deleting \n\n");
 
@@ -527,7 +528,7 @@ namespace WebApplication14.Controllers
                 return;
             }
 
-            cmd.Dispose();
+            //cmd.Dispose();
             cmdChangeStatus.Dispose();
             con.Close();
 
